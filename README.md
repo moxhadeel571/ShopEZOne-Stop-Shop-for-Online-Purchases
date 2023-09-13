@@ -136,24 +136,16 @@ Ensure that you've configured any application-specific settings in your applicat
 If your project uses a database, make sure you've set up the database and configured its connection details. You may need to create tables and seed initial data.
 
 ### Run Database Migrations (If Applicable)
-
-If you use database migration tools like Flyway or Liquibase, execute the necessary migration scripts to create or update the database schema.
-
+Use MongoDB Compass with Local Host Connection as i have already explain how to use it in Documentation
 ### Explore and Test
 
 Explore the application's features, including user registration, login, product management, and shopping cart. Ensure that everything works as expected.
 
 ### Documentation
 
-If you have API documentation or user guides, make them accessible to users and developers. Provide clear instructions on how to use the application, including endpoints and sample requests.
+I have Provided the Documentation for this project so check it out
 
 ### Testing and Quality Assurance
 
 Conduct thorough testing, including unit tests, integration tests, and user acceptance tests, to ensure the application meets quality standards.
 
-### Deployment (Optional)
-
-If you plan to deploy the application to a production environment, follow deployment procedures specific to your hosting platform. This may involve setting up a web server, configuring database connections, and securing the application.
-```
-
-You can paste this into your README.md file, and it should provide a comprehensive guide for setting up and running your Spring Boot project.
