@@ -1,0 +1,267 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+
+<head>
+    <link rel="stylesheet" href="/static/css/checkout.css" type="text/css">
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/checkout/">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <title>Product Detail</title>
+    <script src="../../../../../../AppData/Local/Temp/checkout.js"></script>
+</head>
+<body>
+<header>
+    <header th:insert="fragements/header ::header"></header>
+</header>
+
+<div class="container">
+    <main>
+        <div class="py-5 text-center">
+            <h2>Checkout form</h2>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">Your cart</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <th:block th:each="item : ${cartItems}">
+                        <li class="list-group-item d-flex justify-content-between lh-sm">
+                            <div>
+
+                                <h6 class="my-0">Product name</h6>
+                                <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${item.product.id}, imageIndex=0)}"
+                                     class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                                <small class="text-body-secondary" th:text="${item.product.title}"></small>
+                            </div>
+                            <span class="text-body-secondary" th:text="${item.product.price}"></span>
+                        </li>
+                    </th:block>
+                    <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                        <div class="text-success">
+                            <h6 class="my-0">Promo code</h6>
+                        </div>
+                        <!-- Display the total discounted price -->
+                        <span class="text-success" id="promoCode" th:text="${discountPercentage}">%</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total </span>
+                        <strong th:text="${newTotalSum}"></strong>
+                    </li>
+                    <form th:action="@{/users/redeem-promo/{id}(id=${id})}" method="post">
+                    <!-- Your existing HTML content -->
+                    <div class="form-group">
+
+                            <label for="couponCode">Enter Coupon Code:</label>
+                            <input type="text" id="couponCode" name="couponCode" class="form-control" placeholder="Enter coupon code">
+                            <button type="submit" class="btn btn-primary">Redeem Coupon</button>
+
+                    </div>
+                    <!-- Display the discounted price if available -->
+                    <div th:if="${couponCode}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        Coupon Redeemed: <strong th:text="${couponCode}"></strong><br>
+                        Discount Percentage: <strong th:text="${discountPercentage}"></strong><br>
+                        New Total Price: <strong th:text="${newTotalSum}"></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+
+                    <!-- Your existing HTML content -->
+                    </form>
+                </ul>
+
+            </div>
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">Billing address</h4>
+                <form th:action="@{/users/checkoutPayment/{id}(id=${id})}" th:object="${user}" method="post"  class="needs-validation">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">First name</label>
+                            <input type="text" class="form-control" th:field="*{firstName}" id="firstName" placeholder="First name"  required>
+                            <div class="invalid-feedback">
+                                Valid first name is required.
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Last name</label>
+                            <input type="text" class="form-control" th:field="*{lastName}"  id="lastName" placeholder="Last name" value="" required>
+                            <div class="invalid-feedback">
+                                Valid last name is required.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text">@</span>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                                <div class="invalid-feedback">
+                                    Your username is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="email" class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
+                            <input type="email" class="form-control" id="email" name="to"  placeholder="you@example.com">
+                            <div class="invalid-feedback">
+                                Please enter a valid email address for shipping updates.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="phone" class="form-label">Phone <span class="text-body-secondary">(Optional)</span></label>
+                            <input type="phone" class="form-control" id="phone" name="phone"  placeholder="987340---">
+                            <div class="invalid-feedback">
+                                Please enter a valid Phone Number.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="addressLine1" placeholder="1234 Main St" required>
+                            <div class="invalid-feedback">
+                                Please enter your shipping address.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address2" class="form-label">Address 2 <span class="text-body-secondary">(Optional)</span></label>
+                            <input type="text" class="form-control" name="addressLine2" id="address2" placeholder="Apartment or suite">
+                        </div>
+
+                        <div class="col-md-5">
+                            <label for="country" class="form-label">Country</label>
+                            <select class="form-select" id="country" name="country"  required>
+                                <option >Choose...</option>
+                                <option value="*{country}">India</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid country.
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="state" class="form-label">State</label>
+                            <select class="form-select" id="state" name="state" required>
+                                <option value="">Choose...</option>
+                                <option th:each="state : ${state}" value="*{state}" th:text="${state}"></option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="zip" class="form-label">Zip</label>
+                            <input type="text" class="form-control" id="zip" name="zipcode" placeholder="" required>
+                            <div class="invalid-feedback">
+                                Zip code required.
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <hr class="my-4">
+                    <h4 class="mb-3">Payment</h4>
+                    <div class="my-3">
+                        <form action="/users/payment/charge" method="post">
+                            <div class="form-check">
+                                <input id="rzp-button1" name="paymentMethod"  type="radio" value="Razorpay" class="form-check-input" checked required>
+                                <label class="form-check-label" for="rzp-button1">Razorpay</label>
+                                <input id="razorpay_payment_id" type="hidden" name="razorpay_payment_id" />
+                                <input id="razorpay_order_id" type="hidden" name="razorpay_order_id" />
+                                <input id="razorpay_signature" type="hidden" name="razorpay_signature" />
+                            </div>
+                        </form>
+                        <div class="form-check">
+                            <input id="paymentMethod" name="paymentMethod" type="radio" value="cod" class="form-check-input" checked required>
+                            <label class="form-check-label" name="paymentMethod" for="paymentMethod">COD (Cash On Delivery</label>
+                        </div>
+                        <hr class="my-4">
+                        <button class="w-100 btn btn-primary btn-lg" type="submit" id="checkoutButton">Continue to checkout</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<br>
+<br>
+<!-- Include SweetAlert CSS and JavaScript from CDN -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<footer th:insert="fragements/footer :: footer"></footer>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    // Assuming you have a form element with an ID like "checkout-form"
+    // Add an event listener to the button
+    document.getElementById('checkoutButton').addEventListener('click', function() {
+        // Display a SweetAlert when the button is clicked
+        Swal.fire({
+            title: 'Order Placed Successfully',
+            text: 'Thank you for your order!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+
+        // Set a timer to redirect after 5 seconds
+        setTimeout(function() {
+            window.location.href = '/users/shop'; // Replace with the actual shop page URL
+        }, 15000); // 5000 milliseconds = 5 seconds
+    });
+    // Replace 'your_api_key_here' with your actual Razorpay API key
+    var options = {
+        key: 'rzp_test_BGPTgqrkVagzn6',
+        name: "DJ Tiesto",          // Name of the payment receiver
+        description: "Tron Legacy", // Description of the payment
+        image: "https://s29.postimg.org/r6dj1g85z/daft_punk.jpg", // Image for the payment
+
+        // Pre-fill customer information
+        prefill: {
+            name: document.getElementById("username"),
+            email: document.getElementById("email"),
+            contact: document.getElementById("phone")
+        },
+
+        // Additional notes
+        notes: {
+            address:  document.getElementById("addressLine1"),
+            merchant_order_id:  document.getElementById("id") // Replace with your order ID
+        },
+
+        // Theme customization
+        theme: {
+            color: "#F37254" // Custom color for the payment form
+        },
+
+        // Your order ID goes here
+    };
+
+    // Define the payment handler function
+    options.handler = function(res) {
+        // Fill the form fields with payment information
+        document.getElementById('razorpay_payment_id').value = res.razorpay_payment_id;
+        document.getElementById('razorpay_signature').value = res.razorpay_signature;
+
+        // Submit the form to your server
+        document.razorpayForm.submit();
+    };        document.getElementById('razorpay_order_id').value = 'your_order_id_here'; // Replace with order ID
+
+    // Create the Razorpay object
+    var rzp = new Razorpay(options);
+
+    // Trigger the payment popup when the button is clicked
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp.open();
+        e.preventDefault();
+    };
+</script>
+</body>
+</html>

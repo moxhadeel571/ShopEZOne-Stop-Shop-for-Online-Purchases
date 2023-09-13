@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <title>Store</title>
+<!--    <link rel="stylesheet" href="/static/css/shop.css" type="text/css">-->
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/checkout/">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+</head>
+<style>
+    .card {
+        transition: transform 0.3s;
+    }
+    /* Define styles for the heart icon */
+    .heart {
+        font-size: 24px;
+        color: #ccc;
+        transition: color 0.2s;
+    }
+
+    .favorite-button {
+        color: #ff6b6b; /* Change the color when favorited */
+    }
+
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    @keyframes heartbeat {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.2);
+        }
+    }
+    .kebab-menu {
+        position: relative;
+        display: inline-block;
+    }
+
+    .kebab-icon {
+        cursor: pointer;
+        font-size: 24px;
+    }
+
+    .kebab-dropdown {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .kebab-dropdown ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .kebab-dropdown li {
+        padding: 10px;
+    }
+
+    .kebab-dropdown a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    /* Show the dropdown when hovering over the kebab icon */
+    .kebab-menu:hover .kebab-dropdown {
+        display: block;
+    }
+
+    .img-thumbnail {
+        width: 100%;
+        height: 10vw;
+        object-fit: contain;
+    }
+    /* Style the cart link */
+    .cart-link {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ff6b6b; /* Choose your desired background color */
+        color: #fff; /* Text color */
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    /* Hover effect */
+    .cart-link:hover {
+        background-color: #ff4343; /* Change background color on hover */
+        transform: scale(1.05); /* Add a slight scaling effect on hover */
+    }
+
+    /* You can add more styles as needed, such as box-shadow, border, etc. */
+
+    .nav-tabs {
+        background-color:mediumpurple;
+        border-bottom: 2px solid black;
+    }
+
+    .nav-link {
+        color: #333;
+        font-weight: bold;
+    }
+
+    .nav-link.active {
+        background-color: rebeccapurple;
+        color: black;
+    }
+
+    .tab-content {
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+    }
+    /* CSS for the background image */
+    .with-background {
+        background-image: url("/images/layered-waves-haikei(1).svg");
+        background-size: cover; /* Use 'cover' to make the image cover the entire container width */
+        background-position: center;
+        background-repeat: no-repeat;
+        color: #fff; /* Adjust text color for better visibility */
+    }
+
+    /* CSS for the text and buttons within the section */
+    .product-title,
+    .product-description,
+    .pagination-button {
+        color: white; /* Set text color to contrast with the background */
+    }
+    .custom-width {
+        width: 700px; /* Adjust the width as needed */
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 20% auto;
+        padding: 20px;
+        border-radius: 5px;
+        width: 80%;
+    }
+
+    /* Style for the search input */
+    #searchInput {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    /* Style for the search results */
+    #searchResults {
+        margin-top: 10px;
+    }
+
+</style>
+<body>
+<header>
+    <header th:insert="fragements/header ::header"></header>
+</header>
+
+
+<main>
+    <section class="py-5 text-center container-fluid product-section with-background">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light product-title">Welcome to Our E-Commerce Store</h1>
+                <p class="lead product-description">Discover a wide range of high-quality products that cater to your
+                                                    needs. Browse through our collection and find the perfect items for you.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#AllProducts">All Products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#electronics">Electronics</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#clothing">Clothing</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#books">Books</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#tv">TV</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#mobiles">Mobiles & Accessories</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#laptops">Laptops & Accessories</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#tv-entertainment">TV & Home Entertainment</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#audio">Audio</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#cameras">Cameras</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#peripherals">Computer Peripherals</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="AllProducts" class="tab-pane fade show active">
+            <div class="container px-4">
+                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="product : ${data}">
+                        <div class="col mb-5">
+                            <div class="card h-100 shadow-sm">
+                                <!-- Product Image -->
+                                <div style="max-height: 18rem; overflow: hidden;">
+                                    <img th:src="@{/users/products/{productId}/image/{imageIndex}(productId=${product.id}, imageIndex=0)}" class="card-img-top" alt="Product Image">
+                                </div>
+                                <div class="card-body">
+                                    <!-- Product Title -->
+                                    <h5 class="card-title text-capitalize mb-2" th:text="${product.brand}"></h5>
+                                    <!-- Product Description -->
+                                    <p class="card-text mb-3" th:text="${product.title}"></p>
+                                    <!-- Price -->
+                                    <p class="card-text text-primary h5 mb-3" th:text="${product.price}"></p>
+
+                                    <!-- Buttons -->
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- View Details Button -->
+                                        <a class="btn btn-outline-dark " th:href="@{/users/detail/{id}(id=${product.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart Button -->
+                                        <a class="btn btn-outline-dark " th:href="@{/users/cart/{id}(id=${product.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+
+        </div>
+        <div id="electronics" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="electronics : ${electronic}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${electronics.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${electronics.brand}"></h5>
+                                        <p class="card-text" th:text="${electronics.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${electronics.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${electronics.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${electronics.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <div id="clothing" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="product : ${cloth}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${product.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${product.brand}"></h5>
+                                        <p class="card-text" th:text="${product.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${product.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${product.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${product.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+
+        </div>
+        <div id="books" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="books : ${book}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${books.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${books.brand}"></h5>
+                                        <p class="card-text" th:text="${books.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${books.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${books.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${books.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+
+        </div>
+        <div id="tv" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="tv : ${tv}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${tv.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${tv.brand}"></h5>
+                                        <p class="card-text" th:text="${tv.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${tv.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${tv.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${tv.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <div id="mobiles" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="Mobiles : ${MobilesAccessories}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${Mobiles.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${Mobiles.brand}"></h5>
+                                        <p class="card-text" th:text="${Mobiles.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${Mobiles.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${Mobiles.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${Mobiles.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <div id="laptops" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="laptops : ${laptop}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${laptops.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${laptops.brand}"></h5>
+                                        <p class="card-text" th:text="${laptops.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${laptops.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${laptops.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${laptops.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <div id="tv-entertainment" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="homeEntertainements : ${homeEntertainement}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${homeEntertainements.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${homeEntertainements.brand}"></h5>
+                                        <p class="card-text" th:text="${homeEntertainements.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${homeEntertainements.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${homeEntertainements.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${homeEntertainements.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <div id="audio" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="audios : ${audio}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${audios.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${audios.brand}"></h5>
+                                        <p class="card-text" th:text="${audios.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${audios.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${audios.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${audios.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <div id="cameras" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="cameras : ${camera}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${cameras.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${cameras.brand}"></h5>
+                                        <p class="card-text" th:text="${cameras.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${cameras.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${cameras.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${cameras.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <div id="peripherals" class="tab-pane fade">
+            <div class="container px-4">
+                <div class="row gx-5 row-cols-1 row-cols-md-3 g-4">
+                    <!-- Loop through your product data and generate cards -->
+                    <!-- For each product in your data, generate a card -->
+                    <th:block th:each="PcParts : ${PcPart}">
+                        <div class="col">
+                            <div class="p-3">
+                                <div class="card h-50" style="width: 18rem;">
+                                    <div style="max-height: 24rem; overflow: hidden;">
+                                        <img th:src="@{/products/{productId}/image/{imageIndex}(productId=${PcParts.id}, imageIndex=0)}" class="img-thumbnail img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-capitalize" th:text="${PcParts.brand}"></h5>
+                                        <p class="card-text" th:text="${PcParts.title}"></p>
+                                        <p class="card-text">Price: <span th:text="${PcParts.price}"></span></p>
+
+
+                                        <!-- View Details -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/detail/{id}(id=${PcParts.id})}">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+
+                                        <!-- Add to Cart -->
+                                        <a class="btn btn-dark btn-sm" th:href="@{/users/cart/{id}(id=${PcParts.id})}">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+</main>
+<footer th:insert="fragements/footer ::footer"></footer>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User DashBoard</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+          crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+ <style>
+    .nav-tabs .nav-item .nav-link {
+      font-size: 18px;
+      padding: 20px 30px;
+      transition: background-color 0.3s;
+    }
+    /* styles.css */
+
+    /* Navbar Styles */
+    .navbar {
+      background-color: #333;
+    }
+
+    .navbar-brand {
+      color: #fff;
+      font-size: 24px;
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    .sidebar ul.nav.flex-column {
+      margin-bottom: 20px;
+    }
+
+    /* Card Styles */
+    .card {
+      border: none;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card.blue {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .card.green {
+      background-color: #2ecc71;
+      color: #fff;
+    }
+
+    .card.orange {
+      background-color: #e67e22;
+      color: #fff;
+    }
+
+    .card.red {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    /* Project Table Styles */
+    .projects-table th {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .projects-table td {
+      padding: 10px;
+      vertical-align: middle;
+    }
+
+    /* ... add more styles for other sections as needed ... */
+
+    .nav-tabs .nav-item .nav-link:hover {
+      background-color: black /* Add your hover background color here */
+    }
+
+    .tab-content {
+      padding: 20px;
+      border: 1px solid #DDDDDDFF;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <header th:insert="fragements/header ::header"></header>
+</header>
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">
+              <i class="bi bi-house-door"></i> <!-- Bootstrap Icons Home Icon -->
+                                               Order History
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+              <i class="bi bi-arrow-counterclockwise"></i> <!-- Bootstrap Icons Arrow Counterclockwise Icon -->
+                                                           Order Returns and Exchange
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+              <i class="bi bi-gear"></i> <!-- Bootstrap Icons Gear Icon -->
+                                         Account Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="col-md-10">
+      <div class="tab-content" id="v-pills-tabContent">
+        <!-- Order History Tab -->
+        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+          <div class="container mt-4">
+            <h1>Order History</h1>
+            <table class="table table-bordered">
+              <thead class="thead-dark">
+              <tr>
+                <th>Order ID</th>
+                <th>User Info</th>
+                <th>Processed</th>
+                <th>Total Amount</th>
+                <th>Total Items</th>
+                <th>Order Date</th>
+                <th>Product Names</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <!-- Loop through the list of checkOut objects and display each one in a table row -->
+              <tr th:each="checkout : ${checkouts}">
+                <td th:text="${checkout.id}"></td>
+                <td th:text="${checkout.userInfo.username}"></td>
+                <td th:text="${checkout.processed}"></td>
+                <td th:text="${checkout.totalAmount}"></td>
+                <td th:text="${checkout.totalItems}"></td>
+                <td th:text="${checkout.orderdate}"></td>
+                <td th:text="${checkout.productNames}"></td>
+                <td>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Return
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Return Information</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="container-fluid pt-5">
+                            <div class="text-center mb-4">
+                              <h2 class="section-title px-5"><span class="px-2">Returns and Exchange</span></h2>
+                            </div>
+                            <div class="row px-xl-5">
+                              <div class="col-lg-7 mb-5">
+                                <div class="contact-form">
+                                  <div id="success"></div>
+                                  <form name="returnsExchangeForm" id="returnsExchangeForm" enctype="multipart/form-data" th:action="@{/users/CreateReturn/{id}(id=${checkout.id})}" th:method="post" novalidate="novalidate">
+                                    <div class="control-group">
+                                      <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" required="required" data-validation-required-message="Please enter your name" />
+                                      <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="control-group">
+                                      <input type="email" class="form-control" id="email" name="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
+                                      <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="control-group">
+                                      <textarea class="form-control" rows="6" id="complaintMessage" name="complaintMessage" placeholder="Complaint/Request for Returns and Exchange" required="required" data-validation-required-message="Please enter your message"></textarea>
+                                      <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                      <label  class="input-group-text btn-bd-primary" for="ReportImage">Upload</label>
+                                      <input type="file" class="form-control" id="ReportImage" multiple="multiple" name="ReportImage">
+                                    </div>
+                                    <div class="control-group">
+                                      <label for="reason">Reason:</label>
+                                      <select class="form-control" id="reason" name="reason" required>
+                                        <option value="Wrong Size">Select Option</option>
+                                        <option value="Wrong Size">Wrong Size</option>
+                                        <option value="Defective">Defective</option>
+                                        <option value="Not as Described">Not as Described</option>
+                                        <!-- Add more options as needed -->
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <button class="btn btn-primary py-2 px-4 justify-content-center" type="submit" id="submitReturnsExchange">Submit</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              <!-- Additional content or information can be added here -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+        <div class="tab-pane fade " id="v-pills-track" role="tabpanel" aria-labelledby="v-pills-track-tab" tabindex="0">
+          <div class="container" th:each="detail:${details}" >
+            <article class="card" >
+              <header class="card-header">My Orders / Tracking</header>
+              <div class="card-body">
+                <h6 th:text="${details.id}">Order ID:</h6>
+                <article class="card">
+                  <div class="card-body row">
+                    <div class="col">
+                      <strong>Estimated Delivery time:</strong><br  th:text="${details.estimatedDelivery}">
+                    </div>
+                    <div class="col">
+                      <strong >Shipping By:</strong><br th:text="${details.carrier}">
+                    </div>
+                    <div class="col">
+                      <strong>Status:</strong><br th:text="${details.status}">
+                    </div>
+                    <div class="col">
+                      <strong>Tracking #:</strong><br  th:text="${details.trackingNumber}">
+                    </div>
+                  </div>
+                </article>
+                <div class="track">
+                  <div class="step active">
+                    <span class="icon"><i class="fa fa-check"></i></span>
+                    <span class="text" > </span>
+                  </div>
+                </div>
+                <hr>
+                <ul class="row">
+                  <li class="col-md-4">
+                    <figure class="itemside mb-3">
+                      <figcaption class="info align-self-center">
+                        <p class="title" th:text="${details.productNames}">
+                        <span class="text-muted"th:text="${details.productNames}"></span>
+                      </figcaption>
+                    </figure>
+                  </li>
+                </ul>
+                <hr>
+                <a href="#" class="btn btn-dark" data-abc="true">
+                  <i class="fa fa-chevron-left"></i> Back to orders
+                </a>
+              </div>
+            </article>
+          </div>
+
+
+        </div>
+        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+          <div class="container mt-4">
+            <h2>Order Returns and Exchange</h2>
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col">Return ID</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="order:${orders}">
+                <th scope="row" th:text="${order.id}">1</th>
+                <td th:text="${order.quantity}">1</td>
+                <td  th:text="${order.reason}">Wrong Size</td>
+                <td th:text="${order.status}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
+          <div class="container mt-4">
+            <h2>Account Settings</h2>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Your Account Settings</h5>
+
+                <!-- Profile Information Section -->
+                <h6>Profile Information</h6>
+                <form>
+                  <!-- Profile information fields go here -->
+                  <div class="mb-3">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter your full name">
+                  </div>
+                  <!-- Add more profile information fields as needed -->
+
+                  <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+
+                <!-- Change Password Section -->
+                <h6 class="mt-4">Change Password</h6>
+                <form>
+                  <!-- Change password fields go here -->
+                  <div class="mb-3">
+                    <label for="currentPassword" class="form-label">Current Password</label>
+                    <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="Enter current password">
+                  </div>
+                  <!-- Add more change password fields as needed -->
+
+                  <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+
+                <!-- Preferences Section -->
+                <h6 class="mt-4">Preferences</h6>
+                <form>
+                  <!-- Preferences options go here -->
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="emailNotifications" name="emailNotifications">
+                    <label class="form-check-label" for="emailNotifications">Receive Email Notifications</label>
+                  </div>
+                  <!-- Add more preferences options as needed -->
+
+                  <button type="submit" class="btn btn-primary">Save Preferences</button>
+                </form>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+    </main>
+
+        </div>
+      </div>
+<footer th:insert="fragements/footer :: footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>
