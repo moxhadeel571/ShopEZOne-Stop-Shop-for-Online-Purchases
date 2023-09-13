@@ -3,6 +3,7 @@ package com.example.ecommerce.ecommerce.Entity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -16,7 +17,7 @@ import java.util.List;
 @Data
 @Document(collection = "shipments")
 public class Shipment {
-    @Id
+    @MongoId
     private String id;
     private String orderId;
     private String trackingNumber;

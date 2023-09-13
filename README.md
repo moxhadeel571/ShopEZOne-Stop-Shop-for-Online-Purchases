@@ -2,8 +2,6 @@
 
 ShopEZ is a comprehensive e-commerce platform developed using Spring Boot, designed to provide users with a seamless online shopping experience.
 
-![ShopEZ Logo](link-to-your-logo-image.png)
-
 ## Table of Contents
 
 1. [Project Description](#project-description)

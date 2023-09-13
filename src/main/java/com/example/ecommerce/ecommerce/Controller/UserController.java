@@ -351,9 +351,12 @@ model.addAttribute("id", id);
         List<checkOut> checkouts=  checkOutService.getAllCustomers();
         List<OrderReturn> orders= orderReturnService.getAllOrderReturns();
         List<OrderItem> cart=cartRepository.findAll();
-        Shipment details=shipmentService.getShipmentById(id);
+        System.out.println("ID being searched: " + id);
+
+        List<Shipment> details=shipmentService.getAllShipments();
+        System.out.println("shipment details is" +details);
         model.addAttribute("cart",cart);
-        model.addAttribute("details",details);
+        model.addAttribute("detail",details);
         model.addAttribute("orders", orders);
         model.addAttribute("checkouts", checkouts);
         model.addAttribute("totalItems", totalItems);

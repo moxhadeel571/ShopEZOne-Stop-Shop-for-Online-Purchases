@@ -61,7 +61,8 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public Shipment getShipmentById(String id) {
-        return shipmentRepository.findById(id).orElse(null);
+        Optional<Shipment> shipmentOptional = shipmentRepository.findShipmentById(id);
+        return shipmentOptional.orElse(null);
     }
 
     @Override
