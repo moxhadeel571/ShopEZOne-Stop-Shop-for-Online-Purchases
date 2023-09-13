@@ -30,11 +30,13 @@ ShopEZ is a one-stop solution for both buyers and sellers in the online shopping
 ### For Customers
 
 - [x] Browse and shop for products.
-- [ ] ![image](https://github.com/moxhadeel571/ShopEZOne-Stop-Shop-for-Online-Purchases/assets/60618158/c5c46a64-f5ae-4dd8-b012-141885803348)
+![image](https://github.com/moxhadeel571/ShopEZOne-Stop-Shop-for-Online-Purchases/assets/60618158/c5c46a64-f5ae-4dd8-b012-141885803348)
 - [x] Manage items in the shopping cart.
+![image](https://github.com/moxhadeel571/ShopEZOne-Stop-Shop-for-Online-Purchases/assets/60618158/2d3e8fcc-2afa-4a66-92de-53027b4cad34)
 - [x] Track orders and view order history.
+![image](https://github.com/moxhadeel571/ShopEZOne-Stop-Shop-for-Online-Purchases/assets/60618158/21ee20e8-8bf5-4130-b80e-87766149a41f)
 - [x] Search for specific products by keyword.
-
+![image](https://github.com/moxhadeel571/ShopEZOne-Stop-Shop-for-Online-Purchases/assets/60618158/5ee6d383-dc8f-4344-ab92-5002083ad2e3)
 ## Technologies Used
 
 - Spring Boot
@@ -42,7 +44,7 @@ ShopEZ is a one-stop solution for both buyers and sellers in the online shopping
 - MongoDB (for data storage)
 - Thymeleaf (for server-side templates)
 - HTML, CSS, JavaScript (for the front-end)
-- and more...
+- Ajax
 
 ## Getting Started
 
