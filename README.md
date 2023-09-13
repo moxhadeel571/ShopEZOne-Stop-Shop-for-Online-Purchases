@@ -53,3 +53,61 @@ To get started with the project, follow these steps:
 
    ```bash
    git clone https://github.com/your-username/ShopEZ.git
+
+Prerequisites:
+
+Before you begin, make sure you have the following software installed on your development machine:
+
+Java Development Kit (JDK): Spring Boot applications require Java. Install the latest version of the JDK. You can download it from the official Oracle or OpenJDK website.
+
+Integrated Development Environment (IDE): You can use popular IDEs like IntelliJ IDEA, Eclipse, or Visual Studio Code for Spring Boot development. Ensure you have your preferred IDE installed and set up.
+
+Maven or Gradle: Spring Boot projects are often managed with either Maven or Gradle. Choose one, and ensure it's installed.
+
+Installation Steps:
+Clone the Repository:
+
+Clone your project repository to your local development machine using Git. Replace repository-url with the actual URL of your Git repository.
+
+bash
+
+git clone repository-url
+Open the Project in Your IDE:
+
+Open your project in your chosen IDE. Most modern IDEs have built-in support for Spring Boot projects, making it easier to manage dependencies, build, and run the application.
+
+Build the Project:
+
+If you're using Maven, you can build the project by running the following command in your project's root directory:
+
+bash
+Copy code
+mvn clean install
+If you're using Gradle, use the following command:
+
+bash
+
+gradle clean build
+Run the Application:
+
+Start your Spring Boot application from your IDE. You can typically do this by right-clicking on your main application class (usually annotated with @SpringBootApplication) and selecting "Run" or "Debug."
+
+Alternatively, you can use Maven or Gradle to run the application from the command line:
+
+Maven:
+
+bash
+
+mvn spring-boot:run
+Gradle:
+
+bash
+Copy code
+gradle bootRun
+Access the Application:
+
+Once the application is running, you can access it through a web browser or an API testing tool. By default, Spring Boot applications often run on http://localhost:8080, but this can be configured in your application.properties or application.yml file.
+
+Database Configuration (If Applicable):
+
+If your Spring Boot application uses a database, ensure that you have configured the database connection properly in your application.properties or application.yml file.
