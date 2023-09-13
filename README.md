@@ -64,7 +64,7 @@ Maven or Gradle: Spring Boot projects are often managed with either Maven or Gra
 
 I've updated the README with the additional installation steps and prerequisites. You can paste this into your README.md file:
 
-```markdown
+
 ## Installation
 
 Follow these steps to set up and run the ShopEZ Spring Boot project on your local development environment.
