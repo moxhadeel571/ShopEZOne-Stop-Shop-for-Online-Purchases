@@ -30,6 +30,7 @@ ShopEZ is a one-stop solution for both buyers and sellers in the online shopping
 ### For Customers
 
 - [x] Browse and shop for products.
+- [ ] ![image](https://github.com/moxhadeel571/ShopEZOne-Stop-Shop-for-Online-Purchases/assets/60618158/c5c46a64-f5ae-4dd8-b012-141885803348)
 - [x] Manage items in the shopping cart.
 - [x] Track orders and view order history.
 - [x] Search for specific products by keyword.
